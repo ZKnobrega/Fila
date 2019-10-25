@@ -1,26 +1,27 @@
-#include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 #include <locale.h>
-//////FILA !!!!
+using namespace std;
+//////FILA !!!!//////
 
-struct elemento{
+struct valor{
     int num;
-    struct elemento *prox;
-};
+    struct valor *prox;
+}valor;
 
-typedef struct elemento Elem;
+typedef struct valor Elem;
 
 struct fila{
-    struct elemento *inicio;
-    struct elemento *final;
-};
+    struct valor *inicio;
+    struct valor *fim;
+}fila;
 
 typedef struct fila Fila;
 
 Fila* cria_Fila(){
-    Fila* fi = (Fila*) malloc(sizeof(Fila));
+    Fila* fi = new Fila;
     if(fi != NULL){
-        fi->final = NULL;
+        fi->fim = NULL;
         fi->inicio = NULL;
     }
     return fi;
@@ -50,16 +51,16 @@ int consulta_Fila(Fila* fi, int valor){
 int insere_Fila(Fila* fi,int valor){
     if(fi == NULL){
         return 0;}
-    Elem *no = (Elem*) malloc(sizeof(Elem));
+    Elem *no = new Elem;
     if(no == NULL){
         return 0;}
     no->num = valor;
     no->prox = NULL;
-    if(fi->final == NULL){
+    if(fi->fim == NULL){
         fi->inicio = no;}
     else{
-        fi->final->prox = no;}
-    fi->final = no;
+        fi->fim->prox = no;}
+    fi->fim = no;
     return 1;
 }
 
@@ -71,7 +72,7 @@ int remove_Fila(Fila* fi){
     Elem *no = fi->inicio;
     fi->inicio = fi->inicio->prox;
     if(fi->inicio == NULL){
-        fi->final = NULL;}
+        fi->fim = NULL;}
     free(no);
     return 1;
 }
@@ -99,58 +100,58 @@ int Fila_vazia(Fila* fi){
 
 int imprime_Fila(Fila* fi){
     if(fi == NULL){
-        return ;}
+        cout << "Fila Vazia!!!";}
     Elem* no = fi->inicio;
     while(no != NULL){
-        printf("%d\n",no->num);
+        cout << no->num << endl;
         no = no->prox;
     }
 }
 
 int main(){
-    int valor,insere,tamanho,remover,opt;
+    int valor,insere,tamanho,remover,op;
 
     Fila *fi=cria_Fila();
     do{
-    printf("0. Sair:\n");
-    printf("1. Listar fila:\n");
-    printf("2. Inserir na fila:\n");
-    printf("3. Remover da fila:\n");
-    printf("4. Tamanho da fila:\n");
-    printf("opcao:");
-    scanf("%i",&opt);
-    switch(opt){
-        case(0):
-        break;
-        case(1):
-        printf("Fila:\n");
-        imprime_Fila(fi);
-        printf("\n\n\n");
-        break;
-        case(2):
-            printf("entre com um numero:\n");
-            scanf("%i",&valor);
-            insere= insere_Fila(fi,valor);
-            if(insere==1){
-                printf("inserido com sucesso!\n\n\n");
-            }
-            else{
-                printf("problemas ao inserir!\n");
-            }
+    cout << "1 - Inserir\n2 - Listar\n3 - Remover\n4 - Tamanho\n5 - Sair\n" << endl;
+    cout << "opcao: ";
+    cin >> op;
 
+    switch(op){
+
+        case(1):
+            cout << "Inserir: ";
+            cin >> valor;
+            insere= insere_Fila(fi,valor);
+            if(insere=!1){
+                cout << "Deu Merda....\n";
+            }
         break;
+
+        case(2):
+        cout << "Fila:\n";
+        imprime_Fila(fi);
+        cout << "\n\n\n";
+        break;
+
         case(3):
             remover = remove_Fila(fi);
-            printf("Removido com sucesso!\n\n\n");
+            cout << "Removido com sucesso!\n\n\n";
         break;
+
         case(4):
             tamanho= tamanho_Fila(fi);
-            printf("Quantidade de elementos da fila:%d\n",tamanho);
+            cout << "Quantidade de elementos da fila: " << tamanho;
+            cout << "\n";
         break;
         default:
-            printf("opicao invalida!\n\n\n");
+            cout << "opicao invalida!\n\n\n";
         break;
+
+        case(5):
+        break;
+
     }
-    }while(opt!=0);
+    }while(op!=5);
     return 0;
 }
